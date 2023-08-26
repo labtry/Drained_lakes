@@ -1,4 +1,4 @@
-var aoi = ee.FeatureCollection("users/liuab8023/NC_R2/Yearly_NDVI/GEE_extract_poly_2015-2021");
+var aoi = ee.FeatureCollection("users/NC_R2/Annual_NDVI/GEE_extract_poly");
 
 // Import Landsat Collection Builder module: https://jdbcode.github.io/EE-LCB/
 var lcb = require('users/jstnbraaten/modules:ee-lcb.js'); 
@@ -8,7 +8,7 @@ var lcb = require('users/jstnbraaten/modules:ee-lcb.js');
 
 // Set initial ee-lcb params
 var props = lcb.setProps({
-  startYear: 2020,
+  startYear: 2000,
   endYear: 2020,
   startDate: '06-01',
   endDate: '09-30',
@@ -47,7 +47,7 @@ var plan = function(year){
     .map(lcb.sr.addBandTC)
     .select('NDVI','TCG');
   return col.map(sr_removeBandCFmask)
-    .reduce(ee.Reducer.percentile([90]))
+    .reduce(ee.Reducer.percentile([90]))		//90th
     .set(setMosaicMetadata(col.first()))
     .rename(sr_removeBandCFmask(col.first()).bandNames());
 };
