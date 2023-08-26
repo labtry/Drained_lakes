@@ -9,7 +9,7 @@ type@wkPaperWidthF  = 9.0
 type@wkPaperHeightF = 15.0
 wks = gsn_open_wks(type,"Fig5B")               ; send graphics to PNG file
 
-gsn_define_colormap(wks,"cyt")
+gsn_define_colormap(wks,"userdefined")
 
 res                      = True
 res@gsnDraw              = False                ; Don't draw plot 
@@ -18,8 +18,8 @@ res@xyLineThicknesses    = line_thick           ; Plot line thickness
 res@xyDashPatterns    = (/0,0,0/)  
 res@vpHeightF= 0.37                    ; change aspect ratio of plot
 res@vpWidthF = 0.85   
-res@vpXF = 0.12     ;左边距
-res@vpYF = 0.95      ;上边距               
+res@vpXF = 0.12
+res@vpYF = 0.95            
 res@tmXBMinorOn          = False                ; Turn off x-axis (bottom) minor ticks
 res@tmXTMinorOn          = False                ; Turn off x-axis (bottom)minor ticks
 res@tmXTOn               = False                ; Turn off x-axis (top) major ticks
@@ -45,9 +45,7 @@ res@tiMainFontHeightF    = 0.02               ; Title string size (X0.025 for sc
 res@tmXBLabelFontHeightF = 0.02                ; Label font height (X0.020 for scaling)
 res@tmYLLabelFontHeightF = 0.02                ; Label font height (X0.020 for scaling)
 
-  
 
-;朝里
 res@tmYLMajorOutwardLengthF = -0.00
 res@tmYLMinorOutwardLengthF = -0.00
 res@tmXBMajorOutwardLengthF = -0.00
@@ -108,7 +106,7 @@ res@xyLineColors         = (/31,34,31/)          ; Plot line colors
 res@gsnXYFillColors = (/34,34/)
 plot(1) = gsn_csm_xy(wks,x,var3,res)
 
-;添加辅助线
+
 lnres               = True   
 lnres@gsLineThicknessF = 1.5
 lnres@gsLineColor      = "black" 
