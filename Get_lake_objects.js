@@ -1,6 +1,5 @@
 //Study region from NCSCDv2_circumpolar_WGS84.shp (Hugelius et al., 2013)
-//var aoi = ee.FeatureCollection("/NatureCommunications/StudyRegion");
-
+var aoi = ee.FeatureCollection("/NatureCommunications/StudyRegion");
 
 aoi = aoi.first().geometry();
 
@@ -9,7 +8,7 @@ var image = ee.Image("JRC/GSW1_3/GlobalSurfaceWater");
 var water = image.select("max_extent").clip(aoi).rename("water");
 water = water.selfMask();
 
-/*
+
 // Perform morphological operations; an erosion followed by a dilation
 // To separate finely connected water bodies and eliminate isolated pixels
 var kernel = ee.Kernel.circle({radius: 1});
@@ -18,7 +17,7 @@ var water = water.focalMin({kernel: kernel, iterations: 2})
 //var water = water.focalMin().focalMax();
 Map.addLayer(water, {palette: 'blue'}, 'water_opened');
 
-
+/*
 //River mask way #1; Shapefile from Allen & Pavelsky (2018)
 //var river_shp = ee.FeatureCollection("users/liuab8023/NatureCommunications/river");
 //var mask = ee.Image.constant(1).clip(river_shp).mask().not();
