@@ -10,19 +10,20 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 
 # Load data
-data = pd.read_csv("D:/PredNDVI_data_R4.csv")
+data = pd.read_csv("D:/Pred_NDVIinDLBs_data_final.csv")
 data = data.drop(columns=["UID"])
 
-categorical_features = ["ecoregion","extent","thermokarst","Flooded"]
-
-X = data.drop(columns=["DL_NDVI","ecoregion","extent","thermokarst","Flooded"])
+#During iterative training, variables with correlation coefficients greater than 0.5 
+# with important variables are removed to avoid collinearity
+#X = data.drop(categorical_features)
+X = data.drop(columns=["DL_NDVI"])
 correlation_matrix = X.corr()
 print(correlation_matrix)
-correlation_matrix.to_csv('D://correlation_matrix4.csv')
+correlation_matrix.to_csv('D://correlation_matrix.csv')
 
-#Removing multicollinearity
+'''
+#Removing collinearity
 from statsmodels.stats.outliers_influence import variance_inflation_factor
-
 vif_data = pd.DataFrame()
 vif_data["feature"] = X.columns
 vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
@@ -30,7 +31,6 @@ print(vif_data)
 
 
 from scipy.stats import spearmanr
-X = data.drop(columns=["DL_NDVI"])
 spearman_corr_matrix, _ = spearmanr(X)
 correlation_matrix = pd.DataFrame(spearman_corr_matrix, columns=X.columns, index=X.columns)
 
@@ -40,18 +40,11 @@ correlation_matrix.to_csv('D://spearman_correlation_matrix.csv')
 correlation, p_value = spearmanr(data["Flooded"], data["ecoregion"])
 print("Spearman's Rank Correlation:", correlation)
 print("P-value:", p_value)
-
-
-#During iterative training, variables with correlation coefficients greater than 0.5 
-# with important variables are removed to avoid covariance problems
-#data = data.drop(columns=["slope","srad_ann","precip_ann"])
-#data = data.drop(columns=["tsl_ann","t2m_sum","tsl_sum"])
-#data = data.drop(columns=["yedoma","srad_max","t2m_max","tsl_max"])
-#....
+'''
 
 
 train_data, test_data = train_test_split(data, test_size=0.3, random_state=123)
-
+categorical_features = ["ecoregion","extent","thermokarst","Flooded"]
 X_train = train_data.drop(columns=["DL_NDVI"])
 y_train = train_data["DL_NDVI"]
 X_test = test_data.drop(columns=["DL_NDVI"])
@@ -77,24 +70,20 @@ param_grid = {
 model = CatBoostRegressor(loss_function='RMSE', eval_metric='RMSE', cat_features=categorical_features, verbose=False)
 
 #Randomized Search
-random_search  = RandomizedSearchCV(model, param_distributions=param_grid, n_iter=100, scoring='neg_mean_squared_error', cv=3, verbose=2, n_jobs=-1)
+random_search  = RandomizedSearchCV(model, param_distributions=param_grid, n_iter=100, scoring='neg_mean_squared_error', cv=10, verbose=2, n_jobs=-1)
 random_search.fit(train_data.drop('DL_NDVI', axis=1), train_data['DL_NDVI'])
 
 print("Best Parameters:", random_search.best_params_)
-#best_params = random_search.best_params_
-model = random_search.best_estimator_
+best_params = random_search.best_params_
+#model = random_search.best_estimator_
 
 best_params = {'subsample': 0.5, 'random_strength': 0.8, 'min_data_in_leaf': 10, 'learning_rate': 0.2, 'l2_leaf_reg': 1, 'iterations': 2000, 'early_stopping_rounds': 30, 'depth': 10, 'colsample_bylevel': 1, 'border_count': 128, 'bagging_temperature': 0.5}
-#best_params = {'subsample': 1, 'random_strength': 0.6, 'min_data_in_leaf': 1, 'learning_rate': 0.05, 'l2_leaf_reg': 1, 'iterations': 1000, 'early_stopping_rounds': 30, 'depth': 10, 'colsample_bylevel': 1, 'border_count': 255, 'bagging_temperature': 1.0}
 model = CatBoostRegressor(loss_function='RMSE', eval_metric='RMSE', cat_features=categorical_features, verbose=False, **best_params)
 
 #train model
-#model.fit(X_train, y_train)
 model.fit(X_train, y_train, eval_set=(X_test, y_test))
 
 y_pred = model.predict(X_test)
-
-
 
 rmse = mean_squared_error(y_test, y_pred, squared=False)
 Prmse = rmse*100/y_test.mean()
@@ -102,7 +91,6 @@ r2 = r2_score(y_test, y_pred)
 mae = mean_absolute_error(y_test, y_pred)
 bias = y_pred.mean() - y_test.mean()
 
-# 输出结果
 print(f"RMSE: {rmse:.2f}")
 print(f"%RMSE: {Prmse:.1f}")
 print(f"R2: {r2:.2f}")
@@ -267,7 +255,7 @@ plt.show()
 
 
 
-
+'''
 from sklearn.model_selection import learning_curve
 
 def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None, n_jobs=-1, train_sizes=np.linspace(0.1, 1.0, 5)):
@@ -303,3 +291,4 @@ def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None, n_jobs=-1, t
 plot_learning_curve(model, "Learning Curve", X_train, y_train, cv=5)
 plt.savefig('Learning_Curve.jpg', dpi=600, bbox_inches='tight')
 plt.show()
+'''
