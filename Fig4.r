@@ -6,7 +6,7 @@ font <- "Arial"
 
 loadfonts()
 
-#Yedoma_4
+#Yedoma
 data <- data.frame(Category = c("Small lake", "Large lake", "Medium lake", "All lake"),
                    Yedoma = c(0.806,1.484,1.012,0.873),
                    Nonyedoma = c(0.630,0.310,0.464,0.593),
@@ -28,7 +28,7 @@ fig <- plot_ly(data, type = "scatterpolar", mode = "lines",
 
 plotly::orca(fig, file = "Yedoma3.png", format = "png", width = 800, height = 600, scale = 5)
 
-#地冰含量
+#Ground_ice_content
 data <- data.frame(Category = c("Small lake", "Large lake", "Medium lake", "All lake"),
                    Low = c(0.653,0.190,0.360,0.589),
                    Medium = c(0.808,0.687,0.928,0.827),
@@ -52,7 +52,7 @@ plotly::orca(fig, file = "Ground_ice.png", format = "png", width = 800, height =
 
 
 
-#冻土连续性
+#Permafrost_extent
 data <- data.frame(Category = c("Small lake", "Large lake", "Medium lake", "All lake"),
                    Continu = c(0.404,0.344,0.329,0.389),
                    Discontinu = c(1.331,0.785,1.275,1.310),
@@ -83,7 +83,7 @@ Likely thermokarst lake
 Unlikely thermokarst lake
 '''
 
-#热融湖分布
+#Thermokarst_lake
 data <- data.frame(Category = c("Small lake", "Large lake", "Medium lake", "All lake"),
                    Highly = c(0.708,1.049,1.017,0.779),
                    Moderately = c(0.620,0.307,0.584,0.608),
