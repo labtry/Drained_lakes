@@ -11,7 +11,7 @@ Widespread lake drainage can lead to large-scale drying in Arctic lake-rich area
 
 ## Citation
 If you find this work helpful, please consider citing the paper:
-[Link waiting to be generated]
+Chen, Y., Cheng, X., Liu, A. et al. Tracking lake drainage events and drained lake basin vegetation dynamics across the Arctic. Nat Commun 14, 7359 (2023). https://doi.org/10.1038/s41467-023-43207-0
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
